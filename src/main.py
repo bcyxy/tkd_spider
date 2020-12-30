@@ -1,4 +1,5 @@
 from conf import g_conf
+from spider_worker import WorkersManager
 
 
 def main():
@@ -7,8 +8,10 @@ def main():
     if err_msg != "":
         print(err_msg)
         return
-    
+
     # 启动workers
+    workersMg = WorkersManager(worker_count=1)
+    workersMg.start_workers()
 
 
 if __name__ == "__main__":
