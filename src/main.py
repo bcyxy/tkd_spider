@@ -12,6 +12,7 @@ def main():
     # 启动workers
     workersMg = WorkersManager(worker_count=1)
     workersMg.start_workers()
+    workersMg.join()
 
 
 if __name__ == "__main__":
