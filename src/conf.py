@@ -20,6 +20,10 @@ class Config():
         self.conf_path = "../conf/spider.conf"
         self.conf_hd = configparser.ConfigParser()
         self.conf_cache = {}
+    
+    def init(self):
+        self.__load_local_conf()
+        return ""
 
     def start(self):
         '启动配置更新线程'
@@ -33,8 +37,8 @@ class Config():
         return ""
 
     def get_conf_str(self, conf_key, default_val):
-        # TODO
-        return default_val
+        #TODO lock
+        return self.conf_cache.get(conf_key, default_val)
 
     def get_conf_int(self, conf_key, default_val):
         # TODO
