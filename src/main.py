@@ -17,6 +17,7 @@ def main():
         logging.error("Initial db failed. msg=%s" % err_msg)
         return
 
+    # 启动配置模块进程
     g_conf.start()
 
     # 启动workers
