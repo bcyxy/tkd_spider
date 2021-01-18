@@ -1,25 +1,32 @@
 import pymysql
-from conf import g_conf
+import conf
 
 init_db_sqls = [
-'''
-CREATE TABLE IF NOT EXISTS `spider_conf`
-(
-    conf_key varchar(128),
-    conf_val varchar(512)
-);
-''',
-'''
-CREATE TABLE IF NOT EXISTS `spider_data`
-(
-    `domain` varchar(256),
-    `status` varchar(16),
-    `update_time` datetime,
-    `title` varchar(1024),
-    `keyword` varchar(1024),
-    `descr` varchar(1024)
-);
-'''
+    '''
+    CREATE TABLE IF NOT EXISTS `spider_conf`
+    (
+        conf_key varchar(128),
+        conf_val varchar(512)
+    );
+    ''',
+    '''
+    CREATE TABLE IF NOT EXISTS `spider_status`
+    (
+        status_key varchar(128),
+        status_val varchar(512)
+    );
+    ''',
+    '''
+    CREATE TABLE IF NOT EXISTS `spider_data`
+    (
+        `domain`      varchar(256),
+        `executor`    varchar(64),
+        `update_time` datetime,
+        `title`       varchar(1024),
+        `keyword`     varchar(1024),
+        `descr`       varchar(1024)
+    );
+    '''
 ]
 
 
@@ -33,8 +40,23 @@ class DBOpt():
         self.__init_tables()
         return ""
 
+    def getTasks(self, worker_key, taskCount=20):
+        sql_update = (
+            "UPDATE spider_data SET `executor`='%s', update_time=NOW() "
+            "WHERE `executor`=''"
+            "LIMIT %u"
+        ) % (worker_key, taskCount)
+        sql_get = (
+            "SELECT * FROM spider_data "
+            "WHERE `executor`='%s'"
+        ) % (worker_key)
+
+        print(sql_update)
+        print(sql_get)
+        return []
+
     def __connect_db(self):
-        db_host = g_conf.get_conf_str("db.host", "127.0.0.1")
+        db_host = conf.g_conf.get_conf_str("db.host", "127.0.0.1")
         try:
             self.db_h = pymysql.connect(host=db_host,
                                         user="",

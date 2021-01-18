@@ -1,9 +1,11 @@
+import conf
 import hashlib
 import json
 import logging
 import os
 import time
 from common import http_req
+from db_opt import g_dbHdr
 from threading import Thread
 
 
@@ -11,20 +13,21 @@ class SpiderWorker(Thread):
     def __init__(self):
         super().__init__()
         self.setDaemon(True)
+        self.worker_id = 1
 
     def run(self):
         while True:
             time.sleep(1)
-            task = self.__get_task()
-            rst = self.__exe_task(task)
-            if rst[0] != "":
-                logging.warn("Execute task failed. %s" % rst[0])
-                continue
-            self.__save_rst(rst)
 
-    def __get_task(self):
-        '从数据库中获取任务'
-        return "segmentfault.com"  # TODO
+            worker_key = "%s.%s" % (conf.g_instance_key, self.worker_id)
+            domain_list = g_dbHdr.getTasks(worker_key=worker_key, taskCount=10)
+
+            for domain in domain_list:
+                rst = self.__exe_task(domain)
+                if rst[0] != "":
+                    logging.warn("Execute task failed. %s" % rst[0])
+                    continue
+                self.__save_rst(rst)
 
     def __exe_task(self, task):
         '执行任务'

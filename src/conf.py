@@ -3,6 +3,7 @@ import logging
 import os
 import time
 
+g_instance_key = 12345
 
 log_dir = "../log"
 os.system("mkdir -p %s" % log_dir)
