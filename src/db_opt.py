@@ -51,9 +51,14 @@ class DBOpt():
             "WHERE `executor`='%s'"
         ) % (worker_key)
 
+        #self.__exe_sql(sql_update)
+        #self.__exe_sql(sql_get)
         print(sql_update)
         print(sql_get)
         return []
+
+    def __getTasks(self, worker_key, taskCount):
+
 
     def __connect_db(self):
         db_host = conf.g_conf.get_conf_str("db.host", "127.0.0.1")
@@ -68,6 +73,9 @@ class DBOpt():
             print(e)
             return 1
         return 0
+    
+    def __close_db(self):
+        pass
 
     def __init_tables(self):
         cursor = self.db_h.cursor()
