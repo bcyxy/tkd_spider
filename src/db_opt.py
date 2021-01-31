@@ -102,28 +102,37 @@ class DBOpt():
             CREATE TABLE IF NOT EXISTS `spider_conf`
             (
                 conf_key varchar(128),
-                conf_val varchar(512)
-            );
+                conf_val varchar(512),
+                UNIQUE KEY `idx_conf_key` (`conf_key`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
             ''',
             '''
             CREATE TABLE IF NOT EXISTS `spider_status`
             (
                 status_key varchar(128),
-                status_val varchar(512)
-            );
+                status_val varchar(512),
+                UNIQUE KEY `idx_status_key` (`status_key`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
             ''',
             '''
-            CREATE TABLE IF NOT EXISTS `spider_data`
-            (
-                `domain`      varchar(256),
-                `executor`    varchar(64),
-                `status`      varchar(16),
-                `update_time` datetime,
-                `title`       varchar(1024),
-                `keyword`     varchar(1024),
-                `descr`       varchar(1024)
-            );
+            CREATE TABLE `spider_data` (
+                `domain`      varchar(256)  DEFAULT NULL,
+                `executor`    varchar(64)   DEFAULT NULL,
+                `status`      varchar(16)   DEFAULT NULL,
+                `update_time` datetime      DEFAULT NULL,
+                `title`       varchar(1024) DEFAULT NULL,
+                `keyword`     varchar(1024) DEFAULT NULL,
+                `descr`       varchar(1024) DEFAULT NULL,
+                UNIQUE KEY `idx_domain` (`domain`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ''',
             '''
+            CREATE TABLE `domain_conf` (
+                `type`       varchar(32)  DEFAULT NULL,
+                `top_domain` varchar(32)  DEFAULT NULL,
+                `descr`      varchar(128) DEFAULT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+            ''',
         ]
         for sql in init_db_sqls:
             self.update_db(sql)

@@ -24,13 +24,15 @@ class SpiderWorker(Thread):
         logging.info("Worker id=%s" % (self.worker_id))
 
     def run(self):
-        while True:
+        while not conf.g_is_exit:
             time.sleep(1)
 
             domain_list = self.__getTasks(
                 worker_id=self.worker_id, taskCount=10)
 
             for domain in domain_list:
+                if conf.g_is_exit:
+                    break
                 rst = self.__exe_task(domain)
                 if rst[0] != "":
                     logging.warn("Execute task failed. %s" % rst[0])

@@ -11,9 +11,11 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s|%(levelname)s|%(filename)s:%(lineno)d|%(message)s",
     datefmt="%Y%m%d_%H%M%S"
-    #filename="%s/spider.log" % log_dir,
+    # filename="%s/spider.log" % log_dir,
     # filemode="a"
 )
+
+g_is_exit = False
 
 
 class Config():
