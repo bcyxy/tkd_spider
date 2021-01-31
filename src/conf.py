@@ -1,18 +1,18 @@
 import configparser
 import logging
 import os
+import sys
 import time
-
-g_instance_key = 12345
 
 log_dir = "../log"
 os.system("mkdir -p %s" % log_dir)
 logging.basicConfig(
-    level=logging.DEBUG,
+    stream=sys.stdout,
+    level=logging.INFO,
     format="%(asctime)s|%(levelname)s|%(filename)s:%(lineno)d|%(message)s",
-    datefmt="%Y%m%d_%H%M%S",
-    filename="%s/spider.log" % log_dir,
-    filemode="a"
+    datefmt="%Y%m%d_%H%M%S"
+    #filename="%s/spider.log" % log_dir,
+    # filemode="a"
 )
 
 
@@ -21,7 +21,7 @@ class Config():
         self.conf_path = "../conf/spider.conf"
         self.conf_hd = configparser.ConfigParser()
         self.conf_cache = {}
-    
+
     def init(self):
         self.__load_local_conf()
         return ""
@@ -37,13 +37,19 @@ class Config():
         # thread self.__load_db_conf()
         return ""
 
-    def get_conf_str(self, conf_key, default_val):
-        #TODO lock
+    def get_conf_str(self, conf_key, default_val=""):
+        # TODO lock
         return self.conf_cache.get(conf_key, default_val)
 
-    def get_conf_int(self, conf_key, default_val):
-        # TODO
-        return default_val
+    def get_conf_int(self, conf_key, default_val=0):
+        conf_val = self.conf_cache.get(conf_key, None)
+        if conf_val == None:
+            return default_val
+        try:
+            conf_val = int(conf_val)
+        except:
+            return default_val
+        return conf_val
 
     def __load_local_conf(self):
         try:

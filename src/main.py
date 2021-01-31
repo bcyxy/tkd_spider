@@ -1,7 +1,7 @@
 import logging
 from conf import g_conf
 from db_opt import g_dbHdr
-from spider_worker import WorkersManager
+from spider_worker import SpiderWorker
 
 
 def main():
@@ -20,10 +20,9 @@ def main():
     # 启动配置模块进程
     g_conf.start()
 
-    # 启动workers
-    workersMg = WorkersManager(worker_count=1)
-    workersMg.start_workers()
-    workersMg.join()
+    # 启动worker
+    workersMg = SpiderWorker()
+    workersMg.run()
 
 
 if __name__ == "__main__":

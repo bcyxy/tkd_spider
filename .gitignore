@@ -130,5 +130,6 @@ dmypy.json
 
 # my add
 .vscode/
+conf/worker_id
 data/
 log/
